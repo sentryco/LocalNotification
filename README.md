@@ -1,4 +1,4 @@
-[![Tests](https://github.com/sentryco/LocalNotification/actions/workflows/tests.yml/badge.svg)](https://github.com/sentryco/LocalNotification/actions/workflows/tests.yml)
+[![Tests](https://github.com/sentryco/LocalNotification/actions/workflows/tests.yml/badge.svg)](https://github.com/sentryco/LocalNotification/actions/workflows/tests.yml) [![codebeat badge](https://codebeat.co/badges/a0d953b9-586d-4f10-905f-b2992a9f4076)](https://codebeat.co/projects/github-com-sentryco-localnotification-main)
 
 # LocalNotification
 - LocalNotification is a Swift package that helps you manage local notifications in your iOS application. 
