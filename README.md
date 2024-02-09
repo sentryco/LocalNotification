@@ -3,7 +3,7 @@
 # LocalNotification
 - LocalNotification is a Swift package that helps you manage local notifications in your iOS application. 
 - Intended to be used as a debug tool for background operations where consol output doesnt work
-- Can be used in production, but that isnt very usefull since most people will not allow app level notifications by default, to avoid notification spam etc
+- Can be used in production, but that isn't very usefull since most people will not allow app level notifications by default, to avoid notification spam etc
 
 ## Features
 
@@ -40,13 +40,13 @@ To install the LocalNotification package, add the following to your Package.swif
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourgithubusername/LocalNotification.git", from: "1.0.0")
+    .package(url: "https://github.com/sentryco/LocalNotification.git", branch: "main")
 ]
 ```
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://opensource.org/licenses/MIT)
 
 
 ## Contributing
