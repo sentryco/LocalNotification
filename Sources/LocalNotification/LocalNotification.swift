@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) // LocalNotification is only available for iOS devices
 import Foundation // Import Foundation framework for basic data types and operations
 import UserNotifications // Import UserNotifications framework for local and remote notifications
 import CoreFoundation // Import CoreFoundation framework for low-level data types and operations
@@ -17,7 +17,6 @@ import CoreFoundation // Import CoreFoundation framework for low-level data type
  * - Remark: We have to request authorization to show alerts.
  * - Remark: The most common thing to do is ask for permission to show alerts, badges, and sounds – that doesn’t mean we need to use all of them at the same time, but asking permission up front means we can be selective later on.
  * - Remark: When we tell iOS what kinds of notifications we want, it will show a prompt to the user so they have the final say on what our app can do. When they make their choice, a closure we provide will get called and tell us whether the request was successful or not.
- * - Fixme: ⚠️️⚠️⚠️️ Move this into it's own OSS repo. That Test projects load etc. After there is more CPU compute available on HW etc
  * - Fixme: ⚠️️ Clean up comments in this class etc, move some doc to a readme?
  * - Fixme: ⚠️️ Add support for foreground delegate: https://cocoacasts.com/local-notifications-with-the-user-notifications-framework
  * - Fixme: ⚠️️ Handle notification actions. https://cocoacasts.com/actionable-notifications-with-the-user-notifications-framework
@@ -27,7 +26,6 @@ import CoreFoundation // Import CoreFoundation framework for low-level data type
  * - Fixme: ⚠️️ make internal only? because only used for debugging restoration-mode etc?
  */
 public final class LocalNotification { // Used to debug restoration mode
-   // public static let shared: LocalNotification = .init() // remove this?
    /**
     * Request permission for notifications.
     * - Description: Request authentication to show lcoal notification in the app (Should be done once at app startup) (only allowed to be done once per app-life-time)
@@ -46,7 +44,8 @@ public final class LocalNotification { // Used to debug restoration mode
          .badge, // The option to update the app's badge
          .sound // The option to play a sound
       ] // When we ask the user to grant the app permission to display the notifications, we have to specify what the notifications will want to use. In our case we will ask the user to authenticate for
-      userNotificationCenter.requestAuthorization(options: authOptions) { success, error in // When we make the request, it will tell the user what type of notifications we might send to them.
+      // When we make the request, it will tell the user what type of notifications we might send to them.
+      userNotificationCenter.requestAuthorization(options: authOptions) { (_ success: Bool, _ error) in
          if success {
             result = true  // If the request was successful, set the result to true
          } else if let error = error {
@@ -55,7 +54,8 @@ public final class LocalNotification { // Used to debug restoration mode
          }
          semaphore.signal() // Continue
       }
-      semaphore.wait() // We wait until user has interacted with the notification // (wallTimeout: .distantFuture)
+      // We wait until user has interacted with the notification
+      semaphore.wait() // (wallTimeout: .distantFuture)
       return result
    }
    /**
@@ -82,7 +82,6 @@ public final class LocalNotification { // Used to debug restoration mode
     *   - body: Message associated with the notification. (Body text is hidden before unlock)
     */
    public static func showNotification(title: String, subTitle: String? = nil, body: String? = nil, timeInterval: Double = 1.0, id: String = UUID().uuidString, sound: UNNotificationSound? = UNNotificationSound.default) {
-      // The bellow name is new and untested ⚠️️
       if !isNotificationAvailable { requestPermission() } // Request to show notification (done only once per app lifetime) ⚠️️ This is needed for testing - Fixme: ⚠️️ Use guard? maybe not
       let content = UNMutableNotificationContent() // Create new notifcation content instance
       content.title = title // Set the title of the notification content
@@ -98,7 +97,8 @@ public final class LocalNotification { // Used to debug restoration mode
          content: content, // The content of the notification request
          trigger: trigger // The trigger for the notification request
       )
-      UNUserNotificationCenter.current().add(request)// Add our Request to User Notification Center (Schedule the request with the system)
+      // Add our Request to User Notification Center (Schedule the request with the system)
+      UNUserNotificationCenter.current().add(request)
    }
 }
 /**
@@ -113,7 +113,7 @@ extension LocalNotification {
     * - Fixme: ⚠️️ We could make a method that returns the state of access, so we can notify user to change notification settings etc
     */
    public static var isNotificationAvailable: Bool {
-      guard let notificationSettings = Self.notificationSettings else { // If unable to get notification settings, print an error message and return false
+      guard let notificationSettings: UNNotificationSettings = Self.notificationSettings else { // If unable to get notification settings, print an error message and return false
          Swift.print("Err, ⚠️️ unable to get notificationSettings")
          return false
       }
@@ -138,7 +138,7 @@ extension LocalNotification {
    fileprivate static var notificationSettings: UNNotificationSettings? {
       var result: UNNotificationSettings? // Initialize a variable to hold the notification settings
       let semaphore: DispatchSemaphore = .init(value: 0) // We use semaphore to make this sync
-      UNUserNotificationCenter.current().getNotificationSettings { settings in // Request Notification Settings
+      UNUserNotificationCenter.current().getNotificationSettings { (_ settings: UNNotificationSettings) in // Request Notification Settings
          result = settings // Set the result to the notification settings
          semaphore.signal() // Signal the semaphore to indicate that the operation is complete
       }
@@ -151,8 +151,9 @@ extension LocalNotification {
  */
 extension LocalNotification {
    /**
-    * - Remark: Use this to toggle LocalNotification
+    * - Remark: Use this to toggle `LocalNotification` usage on or off
     */
    public static var isDebug: Bool { false }
 }
 #endif
+// public static let shared: LocalNotification = .init() // remove this?
