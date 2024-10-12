@@ -42,7 +42,7 @@ To install the LocalNotification package, add the following to your Package.swif
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sentryco/LocalNotification.git", branch: "main")
+    .package(url: "https://github.com/sentryco/LocalNotification", branch: "main")
 ]
 ```
 
