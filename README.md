@@ -46,13 +46,10 @@ dependencies: [
 ]
 ```
 
-## License
-
-[MIT](https://opensource.org/licenses/MIT)
-
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
- 
+## Todo:
+- Error Handling: The method requestPermission() in LocalNotification.swift prints an error directly to the console. It might be more useful to handle errors in a way that allows the calling code to react accordingly, such as by using a completion handler that includes an error parameter.
+- Code Duplication: The showNotification method checks if notifications are available and requests permission if not. This logic could potentially be refactored to avoid redundancy and improve the flow of the code.
+- remove unit tests
+- Workflow Efficiency: The current GitHub Actions workflow in tests.yml is set up for basic build and test operations. Depending on the project's needs, this could be expanded to include additional checks such as linting, code style enforcement, or even automated deployment steps.
+- Documentation and Examples
+README Improvements: The README.md file provides a basic introduction and usage examples for the LocalNotification package. This could be enhanced with more detailed examples, better structured information, and possibly a FAQ section to help new users integrate the package more easily.
